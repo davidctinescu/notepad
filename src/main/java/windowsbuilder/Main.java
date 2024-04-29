@@ -10,6 +10,11 @@ import java.io.*;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
+
+/*
+ * @author windowsbuild3r
+ * 
+ */
 public class Main {
     private JFrame frame;
     private JTextArea textArea;
