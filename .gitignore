@@ -1,6 +1,2 @@
-target/classes/windowsbuilder/Main.class
-target/classes/windowsbuilder/Main$1.class
-target/classes/windowsbuilder/Main$2.class
-target/classes/windowsbuilder/Main$3.class
-target/classes/windowsbuilder/Main$4.class
-target/classes/windowsbuilder/Main$5.class
+target/*
+dependency-reduced-pom.xml
