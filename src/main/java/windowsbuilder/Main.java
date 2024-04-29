@@ -110,6 +110,10 @@ public class Main {
         int option = promptSave();
         if (option != JOptionPane.CANCEL_OPTION) {
             textArea.setText("");
+            frame.getContentPane().removeAll();
+            frame.add(textArea, BorderLayout.CENTER);
+            frame.revalidate();
+            frame.repaint();
             currentFile = null;
         }
     }    
