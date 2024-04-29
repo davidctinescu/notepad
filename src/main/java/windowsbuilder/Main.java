@@ -96,10 +96,15 @@ public class Main {
             "Do you want to save changes to " + currentFile.getName() + "?",
             "Save Changes",
             JOptionPane.YES_NO_CANCEL_OPTION);
+            
+            if (option == JOptionPane.YES_OPTION) {
+                saveFile(currentFile);
+            }
+            
             return option;
         }
         return JOptionPane.NO_OPTION;
-    }
+    }    
 
     private void newFile() {
         int option = promptSave();
@@ -112,31 +117,23 @@ public class Main {
     private void openFile() {
         int option = promptSave();
         if (option != JOptionPane.CANCEL_OPTION) {
-        JFileChooser fileChooser = new JFileChooser();
-        int result = fileChooser.showOpenDialog(frame);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            currentFile = selectedFile;
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
-                RSyntaxTextArea syntaxTextArea = new RSyntaxTextArea(20, 60);
-                syntaxTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-                syntaxTextArea.setCodeFoldingEnabled(true);
-                syntaxTextArea.setText("");
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    syntaxTextArea.append(line + "\n");
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showOpenDialog(frame);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                currentFile = selectedFile;
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+                    textArea.setText("");
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        textArea.append(line + "\n");
+                    }
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                reader.close();
-                frame.getContentPane().removeAll();
-                JScrollPane scrollPane = new JScrollPane(syntaxTextArea);
-                frame.add(scrollPane, BorderLayout.CENTER);
-                frame.revalidate();
-                frame.repaint();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }
         }
     }    
 
@@ -151,11 +148,22 @@ public class Main {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile));
                 writer.write(textArea.getText());
                 writer.close();
+                currentFile = selectedFile;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    private void saveFile(File file) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(textArea.getText());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }    
 
     private void showAboutDialog() {
         JOptionPane.showMessageDialog(frame,
