@@ -24,7 +24,7 @@ public class Main {
 
         frame = new JFrame("Notepad");
         frame.setSize(600, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         textArea = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -168,12 +168,14 @@ public class Main {
     }
 
     private void saveFile(File file) {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(textArea.getText());
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (file!= null) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                writer.write(textArea.getText());
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }    
 
