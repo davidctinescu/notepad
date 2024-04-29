@@ -186,7 +186,7 @@ public class Main {
 
     private void showAboutDialog() {
         JOptionPane.showMessageDialog(frame,
-                "Notepad\nVersion 1.0\nPackage: windowsbuilder",
+                "Notepad\nVersion 1.1\nPackage: windowsbuilder",
                 "About",
                 JOptionPane.INFORMATION_MESSAGE);
     }
