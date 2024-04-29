@@ -117,19 +117,27 @@ public class Main {
     private void openFile() {
         int option = promptSave();
         if (option != JOptionPane.CANCEL_OPTION) {
-            JFileChooser fileChooser = new JFileChooser();
-            int result = fileChooser.showOpenDialog(frame);
-            if (result == JFileChooser.APPROVE_OPTION) {
+                JFileChooser fileChooser = new JFileChooser();
+                int result = fileChooser.showOpenDialog(frame);
+                if (result == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
                 currentFile = selectedFile;
                 try {
                     BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
-                    textArea.setText("");
+                    RSyntaxTextArea syntaxTextArea = new RSyntaxTextArea(20, 60);
+                    syntaxTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+                    syntaxTextArea.setCodeFoldingEnabled(true);
+                    syntaxTextArea.setText("");
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        textArea.append(line + "\n");
+                        syntaxTextArea.append(line + "\n");
                     }
                     reader.close();
+                    frame.getContentPane().removeAll();
+                    JScrollPane scrollPane = new JScrollPane(syntaxTextArea);
+                    frame.add(scrollPane, BorderLayout.CENTER);
+                    frame.revalidate();
+                    frame.repaint();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
