@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+
 public class Main {
     private JFrame frame;
     private JTextArea textArea;
@@ -56,7 +59,12 @@ public class Main {
         exitMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                int option = promptSave();
+                if (option == JOptionPane.YES_OPTION) {
+                    saveFile();
+                } else if (option == JOptionPane.NO_OPTION || option == JOptionPane.CLOSED_OPTION) {
+                    System.exit(0);
+                }
             }
         });
         fileMenu.add(newMenuItem);
@@ -82,12 +90,28 @@ public class Main {
         frame.setVisible(true);
     }
 
-    private void newFile() {
-        textArea.setText("");
-        currentFile = null;
+    private int promptSave() {
+        if (currentFile != null) {
+            int option = JOptionPane.showConfirmDialog(frame, 
+            "Do you want to save changes to " + currentFile.getName() + "?",
+            "Save Changes",
+            JOptionPane.YES_NO_CANCEL_OPTION);
+            return option;
+        }
+        return JOptionPane.NO_OPTION;
     }
 
+    private void newFile() {
+        int option = promptSave();
+        if (option != JOptionPane.CANCEL_OPTION) {
+            textArea.setText("");
+            currentFile = null;
+        }
+    }    
+
     private void openFile() {
+        int option = promptSave();
+        if (option != JOptionPane.CANCEL_OPTION) {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(frame);
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -95,18 +119,26 @@ public class Main {
             currentFile = selectedFile;
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+                RSyntaxTextArea syntaxTextArea = new RSyntaxTextArea(20, 60);
+                syntaxTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+                syntaxTextArea.setCodeFoldingEnabled(true);
+                syntaxTextArea.setText("");
                 String line;
-                StringBuilder content = new StringBuilder();
                 while ((line = reader.readLine()) != null) {
-                    content.append(line).append("\n");
+                    syntaxTextArea.append(line + "\n");
                 }
                 reader.close();
-                textArea.setText(content.toString());
+                frame.getContentPane().removeAll();
+                JScrollPane scrollPane = new JScrollPane(syntaxTextArea);
+                frame.add(scrollPane, BorderLayout.CENTER);
+                frame.revalidate();
+                frame.repaint();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
+        }
+    }    
 
     private void saveFile() {
         JFileChooser fileChooser = new JFileChooser();
