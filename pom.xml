@@ -6,7 +6,7 @@
 
     <groupId>windowsbuilder</groupId>
     <artifactId>notepad</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -14,10 +14,16 @@
     </properties>
 
     <dependencies>
-    <dependency>
-        <groupId>com.fifesoft</groupId>
+        <dependency>
+            <groupId>com.fifesoft</groupId>
             <artifactId>rsyntaxtextarea</artifactId>
             <version>3.4.0</version> 
+        </dependency>
+
+        <dependency>
+            <groupId>org.drjekyll</groupId>
+            <artifactId>fontchooser</artifactId>
+            <version>2.4</version>
         </dependency>
     </dependencies>
 

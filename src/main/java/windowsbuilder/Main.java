@@ -10,15 +10,13 @@ import java.io.*;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
+import org.drjekyll.fontchooser.*;;
 
-/*
- * @author windowsbuild3r
- * 
- */
 public class Main {
     private JFrame frame;
     private JTextArea textArea;
     private File currentFile;
+    Font defaultFont = new Font("Dialog", Font.PLAIN, 10);
 
     public Main() {
         try {
@@ -32,11 +30,13 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         textArea = new JTextArea();
+        textArea.setFont(defaultFont);
         JScrollPane scrollPane = new JScrollPane(textArea);
         frame.add(scrollPane, BorderLayout.CENTER);
 
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
+        JMenu viewMenu = new JMenu("View");
         JMenu helpMenu = new JMenu("Help");
 
         JMenuItem newMenuItem = new JMenuItem("New");
@@ -87,7 +87,24 @@ public class Main {
         });
         helpMenu.add(aboutMenuItem);
 
+        JMenuItem fontMenuItem = new JMenuItem("Font");
+        fontMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FontDialog dialog = new FontDialog((Frame) null, "Select Font", true);
+                dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                dialog.setVisible(true);
+                if (!dialog.isCancelSelected()) {
+                    Font defaultFont = dialog.getSelectedFont();
+                    textArea.setFont(defaultFont);
+                }        
+            }
+        });
+
+        viewMenu.add(fontMenuItem);
+
         menuBar.add(fileMenu);
+        menuBar.add(viewMenu);
         menuBar.add(helpMenu);
 
         frame.setJMenuBar(menuBar);
@@ -134,7 +151,41 @@ public class Main {
                 try {
                     BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
                     RSyntaxTextArea syntaxTextArea = new RSyntaxTextArea(20, 60);
-                    syntaxTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+                    syntaxTextArea.setFont(textArea.getFont());
+                    String fileName = selectedFile.getName();
+                    String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+                    String syntaxStyle = SyntaxConstants.SYNTAX_STYLE_NONE;
+                
+                    switch (fileExtension.toLowerCase()) {
+                        case "java":
+                            syntaxStyle = SyntaxConstants.SYNTAX_STYLE_JAVA;
+                            break;
+                        case "xml":
+                            syntaxStyle = SyntaxConstants.SYNTAX_STYLE_XML;
+                            break;
+                        case "html":
+                            syntaxStyle = SyntaxConstants.SYNTAX_STYLE_HTML;
+                            break;
+                        case "css":
+                            syntaxStyle = SyntaxConstants.SYNTAX_STYLE_CSS;
+                            break;
+                        case "js":
+                            syntaxStyle = SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
+                            break;
+                        case "c":
+                            syntaxStyle = SyntaxConstants.SYNTAX_STYLE_C;
+                            break;
+                        case "cpp":
+                            syntaxStyle = SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS;
+                            break;
+                        case "sh":
+                            syntaxStyle = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
+                            break;
+                        default:
+                            syntaxStyle = SyntaxConstants.SYNTAX_STYLE_NONE;
+                            break;
+                        }
+                    syntaxTextArea.setSyntaxEditingStyle(syntaxStyle);
                     syntaxTextArea.setCodeFoldingEnabled(true);
                     syntaxTextArea.setText("");
                     String line;
@@ -186,7 +237,7 @@ public class Main {
 
     private void showAboutDialog() {
         JOptionPane.showMessageDialog(frame,
-                "Notepad\nVersion 1.1\nPackage: windowsbuilder",
+                "Notepad\nVersion 1.2\nAuthor: windowsbuild3r",
                 "About",
                 JOptionPane.INFORMATION_MESSAGE);
     }
