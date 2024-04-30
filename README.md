@@ -1,4 +1,4 @@
-### dependencies (for executing the jre):
+### dependencies (for executing the jar):
 - jre 17
 
 ### dependencies (for building):
