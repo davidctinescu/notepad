@@ -18,6 +18,11 @@
 
 ---
 
+### current issues:
+- choosing a different font doesnt apply in the current file
+
+---
+
 get jdk 17 at:
 - [windows](https://download.oracle.com/java/17/latest/jdk-17_windows-x64_bin.exe)
 - [linux (deb)](https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.deb)
