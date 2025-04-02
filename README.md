@@ -1,3 +1,5 @@
+# project has been discontinued for the most part 💔
+
 ### dependencies (for executing the jar):
 - jre 17
 
@@ -10,7 +12,7 @@
 ### tested on:
 - linux mint x86_64 with jdk 17
 - windows 10 x64 with jdk 17
-- windows 10 x64 with jdk 17 (does not work)
+- windows 11 x64 with jdk 17
 
 ### does not work with:
 - jre 8/java 8
